@@ -11,10 +11,10 @@
     color-scheme: light dark;
     --measure: 46rem;
     --bg: #ffffff; --fg: #1c1c1e; --muted: #6e6e73; --line: #e5e5ea;
-    --link: #0066cc; --card: #f5f5f7; --accent: #0a84ff;
+    --link: #0066cc; --card: #f5f5f7; --accent: #0a84ff; --broth: #C08A1E;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg:#1c1c1e; --fg:#f2f2f7; --muted:#98989d; --line:#38383a; --link:#409cff; --card:#2c2c2e; }
+    :root { --bg:#1c1c1e; --fg:#f2f2f7; --muted:#98989d; --line:#38383a; --link:#409cff; --card:#2c2c2e; --broth:#E3B04B; }
   }
   * { box-sizing: border-box; }
   body {
@@ -35,6 +35,13 @@
   footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
   footer a { color: var(--muted); }
   footer nav { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .colophon {
+    display: flex; align-items: center; gap: .9rem;
+    margin-top: 1.6rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+  }
+  .bnf-seal { width: 48px; height: 48px; flex: none; color: var(--muted); --g: var(--broth); opacity: .9; }
+  .colophon p { margin: 0; font-size: .82rem; line-height: 1.45; }
+
 </style>
 </head>
 <body>
@@ -52,8 +59,12 @@
     trying things before they ship. It installs alongside your normal apps and uninstalls clean.
   </p>
   <p>
-    After that you'll hear from me once more, on the day it lands on the App Store. That's the whole
-    plan.
+    If a new build goes out while the beta is running, I'll email you to say there's an update and
+    what changed in it. I'm not expecting many of those rounds, so it won't be a stream of
+    notifications.
+  </p>
+  <p>
+    Then you'll hear from me once more, on the day it lands on the App Store. That's the whole plan.
   </p>
 
   <h2>How to give it a fair shot</h2>
@@ -101,6 +112,25 @@
       <a href="support.html">Support</a>
     </nav>
     <p style="margin:0">Vantage Point: Then &amp; Now. An iPhone app by Rob Killian. Patent pending.</p>
+    <div class="colophon">
+      <svg class="bnf-seal" viewBox="0 0 160 160" role="img" aria-label="Bob's Noodle Factory seal">
+        <defs><path id="sealcirc" d="M80 14 a66 66 0 1 1 -0.1 0" fill="none"/></defs>
+        <circle cx="80" cy="80" r="76" fill="none" stroke="var(--g)" stroke-width="3"/>
+        <circle cx="80" cy="80" r="53" fill="none" stroke="var(--g)" stroke-width="1.5"/>
+        <g transform="translate(53,59) scale(0.45)">
+          <g fill="none" stroke="var(--g)" stroke-width="5" stroke-linecap="round">
+            <path d="M44 12 q6 8 0 15 q-6 8 0 16"/>
+            <path d="M60 5 q-6 9 0 19 q6 9 0 19"/>
+            <path d="M76 12 q6 8 0 15 q-6 8 0 16"/>
+          </g>
+          <rect x="14" y="42" width="92" height="7" rx="3.5" fill="var(--g)"/>
+          <path d="M22 53 A38 38 0 0 0 98 53 Z" fill="currentColor"/>
+          <path d="M47 91 h26 l-4 8 h-18 Z" fill="currentColor"/>
+        </g>
+        <text font-family="ui-monospace, Menlo, monospace" font-size="11" font-weight="700" letter-spacing="3.2" fill="currentColor"><textPath href="#sealcirc" startOffset="6">BNF · EST. 2026 · HAND-PULLED SOFTWARE</textPath></text>
+      </svg>
+      <p>a Bob's Noodle Factory production<br>Hand-pulled software since 2026</p>
+    </div>
   </footer>
 
 </div>
