@@ -257,9 +257,10 @@
           the signup.
         </p>
         <div class="form-slot">
-          <!-- Kit form: Beta waitlist (id 9840102). Posts straight to Kit; no Kit JS on
-               purpose, so this page still makes zero third-party requests. Kit holds the
-               redirect to /thanks-beta.html in the form settings. -->
+          <!-- Kit form: Beta waitlist (id 9840102). Our own markup posting to Kit's endpoint;
+               ck.5.js (loaded at the foot of the page) attaches via data-sv-form/data-uid so the
+               submit carries Kit's anti-bot token. Kit holds the redirect to /thanks-beta.html
+               in the form settings. -->
           <form class="signup-form seva-form formkit-form"
                 action="https://app.kit.com/forms/9840102/subscriptions" method="post"
                 data-sv-form="9840102" data-uid="c36081a78c" data-format="inline" data-version="5"

@@ -9,10 +9,14 @@ Public site for Vantage Point, served via GitHub Pages at https://getvantagepoin
 
 ## Before pushing the landing page
 
-1. ⛔ **THE FORMS DO NOT WORK YET — do not push index.html.** Kit forms 9840102 / 9840379 are
-   wired, but Kit **quarantines** any submission lacking their reCAPTCHA token
-   (`{"status":"quarantined"}`), while still 302-ing to the thank-you page. It looks like it
-   worked and no subscriber is created. Fix requires loading `ck.5.js` (which also fires a
-   per-visitor tracking beacon) or another approach. Rob's call, pending.
-2. Confirm rights on the historic archive photograph used in the hero and section images (#327).
-3. Re-test a real signup end to end once the form approach is settled.
+Merging `landing-page` into `main` **is** the go-live action; `main` is exactly what the domain serves.
+
+1. ⚠️ **Verify a real signup end to end.** Kit forms 9840102 (beta) / 9840379 (launch) are our own
+   markup posting to Kit's endpoint, and `ck.5.js` is loaded at the foot of `index.html` (Rob's call,
+   08-24: load their script, drop the no-tracking claim). Without the script Kit **quarantined**
+   every submission (`{"status":"quarantined"}`) while still 302-ing to the thank-you page, so the
+   thank-you page is not evidence. Done means: a subscriber appears in Kit and the confirmation
+   email arrives. Kit's server-side **Bot filtering** setting is the thing to check if it still
+   quarantines with the script loaded.
+2. Confirm rights on the historic archive photograph (#327). It is used in the hero, the section
+   images, and `img/lines-historic.jpg` on **both** confirmation pages.
