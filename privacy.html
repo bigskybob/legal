@@ -8,12 +8,14 @@
   :root { color-scheme: light dark; }
   body {
     font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    max-width: 42rem; margin: 0 auto; padding: 2rem 1.25rem 4rem;
+    max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 4rem;
     color: #1c1c1e; background: #ffffff;
   }
   h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 .25rem; }
   h2 { font-size: 1.15rem; margin: 2rem 0 .5rem; }
   .date { color: #6e6e73; margin: 0 0 1.5rem; }
+  .rev { font-size: .85em; }
+  p { margin: 0 0 1rem; }
   ul { padding-left: 1.25rem; }
   li { margin: .4rem 0; }
   a { color: #0066cc; }
@@ -27,7 +29,7 @@
 </head>
 <body>
 <h1>Vantage — Privacy Policy</h1>
-<p class="date">Effective date: July 11, 2026</p>
+<p class="date">Effective date: August 24, 2026 <span class="rev">(first version July 11, 2026)</span></p>
 
 <p>Vantage is an iOS app that helps you retake photos of the same scene over time and compare
 the results. It is built to work entirely on your device.</p>
@@ -42,8 +44,11 @@ unless you choose to share or export it.</p>
   <li><strong>Camera</strong> — powers the live viewfinder and captures your photos. Frames
   are processed in real time on your device and are never transmitted anywhere.</li>
   <li><strong>Photo library</strong> — used when you pick an existing photo as a reference,
-  and (with your permission) to save finished photos back to your library. The app only
-  accesses what you select or save.</li>
+  and (with your permission) to save finished photos back to your library. If you open
+  <em>Nearby photos</em>, Vantage looks through the location tags on the photos in your library,
+  right there on the phone, to find ones taken close to where you're standing. It reads those
+  tags to make the list and keeps nothing from it. Otherwise it touches only the photos you pick
+  or save.</li>
   <li><strong>Location and compass (While Using the App)</strong> — when you save a photo,
   Vantage records where it was taken so it can guide you back to the same spot later. This
   stays in the app's local data on your device. Vantage never requests background
@@ -64,11 +69,13 @@ won't work.</p>
 
 <h2>Your photos and data</h2>
 <p>Photos you take and the data Vantage records about them (including location) are stored
-locally in the app's storage on your device. Deleting a photo series in the app, or deleting
-the app itself, removes that data. Saving to your photo library and any sharing or exporting
-happen only when you initiate them through iOS; anything you export is then under your
-control. Note that photos saved to your library carry standard photo metadata (such as
-location) just like photos from the built-in Camera app.</p>
+locally in the app's storage on your device. Deleting a photo series in the app removes its
+photos, unless you made a second series from the same photos and that one is still there.
+Deleting the app removes everything.</p>
+<p>When you tap Save, the app saves the photo to your library. When you tap Share, it hands it to
+the iOS share sheet. That's it. Nothing gets saved or sent on its own. Photos saved to your
+library carry standard photo metadata (such as location) just like photos from the built-in
+Camera app.</p>
 
 <h2>Beta versions (TestFlight) and crash reports</h2>
 <p>If you use a beta version of Vantage through Apple's TestFlight, Apple may collect crash
