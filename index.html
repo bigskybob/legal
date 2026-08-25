@@ -92,7 +92,7 @@
   .shot video, .shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .shot > * { position: absolute; inset: 0; }
   /* the interactive then/now wipe (touch + reduced motion) */
-  .wipe { --p: 50%; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; display: none; }
+  .wipe { --p: 50%; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; display: none; z-index: 1; }
   .wipe img { position: absolute; inset: 0; pointer-events: none; }
   .wipe .then { clip-path: inset(0 calc(100% - var(--p)) 0 0); }
   .wipe .seam {
@@ -121,6 +121,7 @@
   .shot.mode-show .wipe .hint { bottom: 2.1rem; }
   .wipe.used .hint { opacity: 0 !important; }
   /* the desktop sequence: a slow slideshow, the wipe first */
+  .slides { pointer-events: none; }
   .slides figure { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.6s ease; pointer-events: none; }
   .slides figure img { position: absolute; inset: 0; }
   .slides figure.on { opacity: 1; }
