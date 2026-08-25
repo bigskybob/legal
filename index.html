@@ -111,6 +111,15 @@
     backdrop-filter: blur(6px); pointer-events: none;
   }
   .wipe .tag-then { left: .7rem; } .wipe .tag-now { right: .7rem; }
+  .wipe .hint {
+    position: absolute; left: 50%; bottom: 1rem; transform: translateX(-50%);
+    font-size: .85rem; font-weight: 600; letter-spacing: .02em; color: #fff; white-space: nowrap;
+    padding: .38rem .8rem; border-radius: 999px; background: rgba(0,0,0,.5); backdrop-filter: blur(6px);
+    opacity: 0; transition: opacity .6s ease; pointer-events: none;
+  }
+  .shot.mode-touch .wipe .hint, .shot.settled .wipe .hint { opacity: 1; }
+  .shot.mode-show .wipe .hint { bottom: 2.1rem; }
+  .wipe.used .hint { opacity: 0 !important; }
   /* the desktop sequence: a slow slideshow, the wipe first */
   .slides figure { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.6s ease; pointer-events: none; }
   .slides figure img { position: absolute; inset: 0; }
@@ -124,6 +133,14 @@
   .shot.mode-show .wipe { display: block; opacity: 1; transition: opacity 1.6s ease; }
   .shot.mode-show .wipe.off { opacity: 0; pointer-events: none; }
   @media (prefers-reduced-motion: reduce) { .slides .fg, .slides figure.on .fg { transform: none; transition: none; } }
+  .shot > .dots { position: absolute; inset: auto 0 .7rem 0; display: none; justify-content: center; gap: .5rem; z-index: 2; }
+  .shot.mode-show > .dots { display: flex; }
+  .dots button {
+    width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 0; cursor: pointer;
+    background: rgba(255,255,255,.45); box-shadow: 0 0 0 1px rgba(0,0,0,.25); transition: background .3s, transform .3s;
+  }
+  .dots button[aria-current="true"] { background: #fff; transform: scale(1.25); }
+  .dots button:hover, .dots button:focus-visible { background: #fff; outline: none; }
   .caption { font-size: .9rem; color: var(--band-muted); margin: .85rem 0 0; }
 
   /* ---------- use cases ---------- */
@@ -246,6 +263,7 @@
         <div class="seam"><span class="grip" aria-hidden="true">&#8596;</span></div>
         <span class="tag tag-then" aria-hidden="true">Then</span>
         <span class="tag tag-now" aria-hidden="true">Now</span>
+        <span class="hint" aria-hidden="true">Drag to compare</span>
       </div>
       <div class="slides" id="slides" aria-hidden="true">
         <figure class="wide"><img class="fg" src="img/lines-historic.jpg" alt=""></figure>
@@ -253,11 +271,11 @@
         <figure><img class="bg" src="img/ui-adjust.jpg" alt=""><img class="fg" src="img/ui-adjust.jpg" alt=""></figure>
         <figure class="wide"><img class="fg" src="img/step-adjust.jpg" alt=""></figure>
         <figure><img class="bg" src="img/ui-output.jpg" alt=""><img class="fg" src="img/ui-output.jpg" alt=""></figure>
-        <figure class="wide"><img class="fg" src="img/slide-pip.jpg" alt=""></figure>
         <figure><img class="bg" src="img/slide-split.jpg" alt=""><img class="fg" src="img/slide-split.jpg" alt=""></figure>
       </div>
+      <div class="dots" id="dots" role="tablist" aria-label="Pictures"></div>
     </div>
-    <p class="caption">The same corner, about a hundred years apart. Drag the handle on a phone. Historic photo from the San Leandro Library.</p>
+    <p class="caption">The same corner, about a hundred years apart. Historic photo from the San Leandro Library.</p>
   </div>
 </header>
 
@@ -609,7 +627,7 @@
     shot.classList.add('mode-touch');
     function pos(e) { var r = wipe.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; }
     wipe.addEventListener('pointerdown', function (e) {
-      dragging = true; wipe.setPointerCapture(e.pointerId); set(pos(e)); manualUntil = Date.now() + 5000; });
+      dragging = true; wipe.classList.add('used'); wipe.setPointerCapture(e.pointerId); set(pos(e)); manualUntil = Date.now() + 5000; });
     wipe.addEventListener('pointermove', function (e) { if (dragging) { set(pos(e)); manualUntil = Date.now() + 5000; } });
     ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { wipe.addEventListener(t, function () { dragging = false; }); });
     if (!reduce) {
@@ -626,37 +644,55 @@
     }
   } else {
     shot.classList.remove('mode-touch'); shot.classList.add('mode-show');
-    // desktop: a slow slideshow. Slide 0 is the wipe, swept by code; then the screens.
+    // desktop: one slow pass through the screens, starting and ending on the wipe, which then sits there to be dragged.
     var figs = slides ? Array.prototype.slice.call(slides.querySelectorAll('figure')) : [];
-    var HOLD = 7000, SWEEP = 6500, pausedUntil = 0, cur = -1, timer = null, raf = null;
+    var dotsBox = document.getElementById('dots'), dots = [];
+    var HOLD = 7000, SWEEP = 6500, pausedUntil = 0, cur = -1, timer = null, raf = null, auto = true;
     function ease(t) { return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+    function stopTimers() { clearTimeout(timer); if (raf) cancelAnimationFrame(raf); raf = null; }
     function sweep(done) {
       var t0 = null, fired = false, guard;
-      function finish() { if (fired) return; fired = true; clearTimeout(guard); if (raf) cancelAnimationFrame(raf); done(); }
+      function finish() { if (fired) return; fired = true; clearTimeout(guard); if (raf) cancelAnimationFrame(raf); raf = null; done(); }
       function frame(ts) {
-        if (Date.now() < pausedUntil) { t0 = null; guard = setTimeout(finish, SWEEP + 6500); raf = requestAnimationFrame(frame); return; }
+        if (!auto) return;
+        if (Date.now() < pausedUntil) { t0 = null; raf = requestAnimationFrame(frame); return; }
         if (t0 === null) t0 = ts;
         var k = Math.min(1, (ts - t0) / SWEEP);
         set(8 + 84 * ease(k));
         if (k < 1) raf = requestAnimationFrame(frame); else finish();
       }
-      guard = setTimeout(finish, SWEEP + 400);   // advances the show even if frames stall
+      guard = setTimeout(function () { if (auto) finish(); }, SWEEP + 7000);   // advances even if frames stall
       raf = requestAnimationFrame(frame);
     }
+    function mark(i) { dots.forEach(function (d, k) { d.setAttribute('aria-current', k === i + 1 ? 'true' : 'false'); }); }
     function show(i) {
-      cur = i;
+      cur = i; mark(i);
       figs.forEach(function (f, k) { f.classList.toggle('on', k === i); });
       wipe.classList.toggle('off', i !== -1);
-      if (i === -1) { set(8); sweep(function () { timer = setTimeout(function () { show(0); }, 900); }); }
-      else timer = setTimeout(function () { show(i + 1 < figs.length ? i + 1 : -1); }, HOLD);
     }
-    // dragging the wipe on desktop pauses the sweep and the clock for a while
+    function play(i) {           // the automatic pass
+      stopTimers(); show(i);
+      if (!auto) return;
+      if (i === -1) { set(8); sweep(function () { timer = setTimeout(function () { play(0); }, 900); }); }
+      else if (i + 1 < figs.length) timer = setTimeout(function () { play(i + 1); }, HOLD);
+      else timer = setTimeout(function () { auto = false; set(50); show(-1); shot.classList.add('settled'); }, HOLD);   // land on the wipe and stay
+    }
+    function goto(i) { auto = false; stopTimers(); if (i === -1) { set(50); shot.classList.add('settled'); } show(i); }
+    if (dotsBox) {
+      for (var k = -1; k < figs.length; k++) (function (k) {
+        var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
+        b.setAttribute('aria-label', k === -1 ? 'Then and now' : 'Picture ' + (k + 2));
+        b.addEventListener('click', function () { goto(k); });
+        dotsBox.appendChild(b); dots.push(b);
+      })(k);
+    }
+    // dragging the wipe: pauses the sweep during the pass; after the pass it is simply the slider
     function pos(e) { var r = wipe.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; }
     wipe.addEventListener('pointerdown', function (e) {
-      if (cur !== -1) return; dragging = true; wipe.setPointerCapture(e.pointerId); set(pos(e)); pausedUntil = Date.now() + 6000; });
+      if (cur !== -1) return; dragging = true; if (!auto) wipe.classList.add('used'); wipe.setPointerCapture(e.pointerId); set(pos(e)); pausedUntil = Date.now() + 6000; });
     wipe.addEventListener('pointermove', function (e) { if (dragging) { set(pos(e)); pausedUntil = Date.now() + 6000; } });
     ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { wipe.addEventListener(t, function () { dragging = false; }); });
-    show(-1);
+    play(-1);
   }
 })();
 </script>
