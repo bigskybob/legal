@@ -114,8 +114,9 @@
     background: linear-gradient(180deg, rgba(22,104,196,.05), rgba(185,106,31,.06));
     border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 3rem 0;
   }
-  .choices { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); margin-top: 2rem; align-items: start; }
-  .choice { border: 1px solid var(--line); border-radius: 16px; padding: 1.6rem; background: var(--bg); border-top: 3px solid var(--c); }
+  .choices { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); margin-top: 2rem; align-items: stretch; }
+  .choice { border: 1px solid var(--line); border-radius: 16px; padding: 1.6rem; background: var(--bg); border-top: 3px solid var(--c); display: flex; flex-direction: column; }
+  .choice .form-slot { margin-top: auto; padding-top: 1rem; }
   .choice h3 { font-size: 1.15rem; margin-bottom: .5rem; }
   .choice > p { color: var(--muted); font-size: .97rem; }
   .choice .tag { display:block; font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; color:var(--c); font-weight:700; margin-bottom:.55rem; }
@@ -330,6 +331,11 @@
         The idea grew from there. The same corner of the garden every spring. The same first day of
         school picture, year after year.
       </p>
+      <p>
+        Tools and new technology have always fired up my creative side. Once the vision really
+        started to come together in a working app, this became the way I wanted to share the idea
+        with others.
+      </p>
       </div>
       <figure class="why-shot">
         <img src="img/why-yosemite.jpg" alt="A granite wall in Yosemite Valley framed by an oak, with pines and a meadow in the foreground.">
@@ -419,9 +425,7 @@
       <h2 style="margin-bottom:0">It all happens on the phone</h2>
       <p style="color:var(--muted);margin:.6rem 0 0">
         Everything happens on the phone itself, and I never see any of it. Your photos don't hit a
-        cloud, an edge server or a data lake. Nothing you make gets used to train an AI model. There's
-        no networking code in the app at all, so there's nothing in there that could send a photo
-        anywhere even if I wanted that.
+        cloud, an edge server or a data lake. Nothing you make gets used to train an AI model.
       </p>
       <ul>
         <li><strong>No account.</strong> Nothing to sign up for and nothing to log into.</li>
@@ -430,10 +434,9 @@
         <li><strong>Location stays put.</strong> Used to get you back to the spot, and nowhere else.</li>
       </ul>
       <p class="note">
-        This is a tool, not a big tech company. I built it for myself, as a dad and a tech enthusiast
-        and an amateur photographer, and that's still exactly who it's for. If you're the sort of
-        person who keeps meaning to go back and take that picture again, you're who I had in mind
-        the whole time.
+        This is a tool, not a big tech company. I built it for myself, as a dad, a tinkerer, an
+        explorer, a tech enthusiast and an amateur photographer. If you're fascinated by change, by
+        history, or you love watching your kids grow up, this app is for you.
         <span class="sig">Rob</span>
       </p>
       <p style="margin:1rem 0 0"><a href="privacy.html">Read the full privacy policy</a></p>
@@ -446,7 +449,7 @@
     <div class="prose">
       <h2>Free, with a way to chip in later</h2>
       <p style="color:var(--muted)">
-        Vantage Point is free, and the part you'd use most stays free. No ads, no watermark, and no
+        Vantage Point is free, and the part you'll use most stays free. No ads, no watermark, and no
         cap on how many places you keep going back to.
       </p>
       <p style="color:var(--muted)">
