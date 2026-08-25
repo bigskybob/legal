@@ -111,13 +111,19 @@
     backdrop-filter: blur(6px); pointer-events: none;
   }
   .wipe .tag-then { left: .7rem; } .wipe .tag-now { right: .7rem; }
-  /* the desktop sequence: the loop for a moment, then a few screens */
-  .loop, .slides img { opacity: 0; transition: opacity .9s ease; }
-  .slides img { object-fit: contain; background: #000; }
-  .loop.on, .slides img.on { opacity: 1; }
+  /* the desktop sequence: a slow slideshow, the wipe first */
+  .slides figure { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.6s ease; pointer-events: none; }
+  .slides figure img { position: absolute; inset: 0; }
+  .slides figure.on { opacity: 1; }
+  .slides .bg { filter: blur(26px) brightness(.55); transform: scale(1.2); }
+  .slides .fg { object-fit: contain; transform: scale(1); transition: transform 9s linear; }
+  .slides figure.on .fg { transform: scale(1.045); }
+  .slides figure.wide .bg { display: none; }
   .shot.mode-touch .wipe { display: block; }
-  .shot.mode-touch .loop, .shot.mode-touch .slides { display: none; }
-  .shot.mode-show .wipe { display: none; }
+  .shot.mode-touch .slides { display: none; }
+  .shot.mode-show .wipe { display: block; opacity: 1; transition: opacity 1.6s ease; }
+  .shot.mode-show .wipe.off { opacity: 0; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .slides .fg, .slides figure.on .fg { transform: none; transition: none; } }
   .caption { font-size: .9rem; color: var(--band-muted); margin: .85rem 0 0; }
 
   /* ---------- use cases ---------- */
@@ -241,14 +247,14 @@
         <span class="tag tag-then" aria-hidden="true">Then</span>
         <span class="tag tag-now" aria-hidden="true">Now</span>
       </div>
-      <video class="loop" id="loop" muted playsinline loop preload="metadata" poster="img/hero-poster.jpg"
-             aria-label="A historic black-and-white photo of a corner building sliding across to meet the same corner photographed today.">
-        <source src="img/hero-slide.mp4" type="video/mp4">
-      </video>
       <div class="slides" id="slides" aria-hidden="true">
-        <img src="img/slide-split.jpg" alt="" loading="lazy">
-        <img src="img/step-adjust.jpg" alt="" loading="lazy">
-        <img src="img/slide-pip.jpg" alt="" loading="lazy">
+        <figure class="wide"><img class="fg" src="img/lines-historic.jpg" alt=""></figure>
+        <figure><img class="bg" src="img/step-plan.jpg" alt=""><img class="fg" src="img/step-plan.jpg" alt=""></figure>
+        <figure><img class="bg" src="img/ui-adjust.jpg" alt=""><img class="fg" src="img/ui-adjust.jpg" alt=""></figure>
+        <figure class="wide"><img class="fg" src="img/step-adjust.jpg" alt=""></figure>
+        <figure><img class="bg" src="img/ui-output.jpg" alt=""><img class="fg" src="img/ui-output.jpg" alt=""></figure>
+        <figure class="wide"><img class="fg" src="img/slide-pip.jpg" alt=""></figure>
+        <figure><img class="bg" src="img/slide-split.jpg" alt=""><img class="fg" src="img/slide-split.jpg" alt=""></figure>
       </div>
     </div>
     <p class="caption">The same corner, about a hundred years apart. Drag the handle on a phone. Historic photo from the San Leandro Library.</p>
@@ -620,20 +626,37 @@
     }
   } else {
     shot.classList.remove('mode-touch'); shot.classList.add('mode-show');
-    var imgs = slides ? slides.querySelectorAll('img') : [];
-    var LOOP_MS = 7200, SLIDE_MS = 3500;
-    function showLoop() {
-      imgs.forEach ? imgs.forEach(function (i) { i.classList.remove('on'); }) : null;
-      try { loop.currentTime = 0; } catch (e) {}
-      loop.classList.add('on'); var pl = loop.play(); if (pl && pl.catch) pl.catch(function () {});
-      setTimeout(function () { loop.classList.remove('on'); showSlide(0); }, LOOP_MS);
+    // desktop: a slow slideshow. Slide 0 is the wipe, swept by code; then the screens.
+    var figs = slides ? Array.prototype.slice.call(slides.querySelectorAll('figure')) : [];
+    var HOLD = 7000, SWEEP = 6500, pausedUntil = 0, cur = -1, timer = null, raf = null;
+    function ease(t) { return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+    function sweep(done) {
+      var t0 = null, fired = false, guard;
+      function finish() { if (fired) return; fired = true; clearTimeout(guard); if (raf) cancelAnimationFrame(raf); done(); }
+      function frame(ts) {
+        if (Date.now() < pausedUntil) { t0 = null; guard = setTimeout(finish, SWEEP + 6500); raf = requestAnimationFrame(frame); return; }
+        if (t0 === null) t0 = ts;
+        var k = Math.min(1, (ts - t0) / SWEEP);
+        set(8 + 84 * ease(k));
+        if (k < 1) raf = requestAnimationFrame(frame); else finish();
+      }
+      guard = setTimeout(finish, SWEEP + 400);   // advances the show even if frames stall
+      raf = requestAnimationFrame(frame);
     }
-    function showSlide(i) {
-      if (!imgs.length) return showLoop();
-      Array.prototype.forEach.call(imgs, function (im, k) { im.classList.toggle('on', k === i); });
-      setTimeout(function () { if (i + 1 < imgs.length) showSlide(i + 1); else { imgs[i].classList.remove('on'); setTimeout(showLoop, 300); } }, SLIDE_MS);
+    function show(i) {
+      cur = i;
+      figs.forEach(function (f, k) { f.classList.toggle('on', k === i); });
+      wipe.classList.toggle('off', i !== -1);
+      if (i === -1) { set(8); sweep(function () { timer = setTimeout(function () { show(0); }, 900); }); }
+      else timer = setTimeout(function () { show(i + 1 < figs.length ? i + 1 : -1); }, HOLD);
     }
-    showLoop();
+    // dragging the wipe on desktop pauses the sweep and the clock for a while
+    function pos(e) { var r = wipe.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; }
+    wipe.addEventListener('pointerdown', function (e) {
+      if (cur !== -1) return; dragging = true; wipe.setPointerCapture(e.pointerId); set(pos(e)); pausedUntil = Date.now() + 6000; });
+    wipe.addEventListener('pointermove', function (e) { if (dragging) { set(pos(e)); pausedUntil = Date.now() + 6000; } });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { wipe.addEventListener(t, function () { dragging = false; }); });
+    show(-1);
   }
 })();
 </script>
