@@ -113,6 +113,7 @@
   .wipe .tag-then { left: .7rem; } .wipe .tag-now { right: .7rem; }
   /* the desktop sequence: the loop for a moment, then a few screens */
   .loop, .slides img { opacity: 0; transition: opacity .9s ease; }
+  .slides img { object-fit: contain; background: #000; }
   .loop.on, .slides img.on { opacity: 1; }
   .shot.mode-touch .wipe { display: block; }
   .shot.mode-touch .loop, .shot.mode-touch .slides { display: none; }
