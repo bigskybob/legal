@@ -85,11 +85,38 @@
     background: rgba(226,164,89,.08);
   }
   .shot {
-    margin: 2.25rem 0 0; border-radius: 16px; overflow: hidden;
+    position: relative; margin: 2.25rem 0 0; border-radius: 16px; overflow: hidden;
     background: #000; box-shadow: 0 22px 60px rgba(0,0,0,.5);
     aspect-ratio: 1110 / 760;
   }
   .shot video, .shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .shot > * { position: absolute; inset: 0; }
+  /* the interactive then/now wipe (touch + reduced motion) */
+  .wipe { --p: 50%; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; display: none; }
+  .wipe img { position: absolute; inset: 0; pointer-events: none; }
+  .wipe .then { clip-path: inset(0 calc(100% - var(--p)) 0 0); }
+  .wipe .seam {
+    position: absolute; top: 0; bottom: 0; left: var(--p); width: 2px; margin-left: -1px;
+    background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.25);
+  }
+  .wipe .grip {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 44px; height: 44px; border-radius: 50%; background: #fff; color: #1b1a19;
+    display: grid; place-items: center; font-size: 1.15rem; font-weight: 700;
+    box-shadow: 0 4px 14px rgba(0,0,0,.35);
+  }
+  .wipe .tag {
+    position: absolute; top: .7rem; font-size: .8rem; font-weight: 700; letter-spacing: .04em;
+    padding: .28rem .65rem; border-radius: 999px; color: #fff; background: rgba(0,0,0,.45);
+    backdrop-filter: blur(6px); pointer-events: none;
+  }
+  .wipe .tag-then { left: .7rem; } .wipe .tag-now { right: .7rem; }
+  /* the desktop sequence: the loop for a moment, then a few screens */
+  .loop, .slides img { opacity: 0; transition: opacity .9s ease; }
+  .loop.on, .slides img.on { opacity: 1; }
+  .shot.mode-touch .wipe { display: block; }
+  .shot.mode-touch .loop, .shot.mode-touch .slides { display: none; }
+  .shot.mode-show .wipe { display: none; }
   .caption { font-size: .9rem; color: var(--band-muted); margin: .85rem 0 0; }
 
   /* ---------- use cases ---------- */
@@ -204,15 +231,26 @@
       It takes you back to where a photo was taken, so you can take it again.
     </p>
 
-    <div class="shot">
-      <video autoplay muted playsinline preload="auto" poster="img/hero-poster.jpg"
+    <div class="shot mode-touch" id="hero">
+      <div class="wipe" id="wipe" role="img"
+           aria-label="A historic black-and-white photo of a corner building and the same corner today, one wiping across the other. Drag the handle to compare.">
+        <img class="now" src="img/hero-now.jpg" alt="">
+        <img class="then" src="img/hero-then.jpg" alt="">
+        <div class="seam"><span class="grip" aria-hidden="true">&#8596;</span></div>
+        <span class="tag tag-then" aria-hidden="true">Then</span>
+        <span class="tag tag-now" aria-hidden="true">Now</span>
+      </div>
+      <video class="loop" id="loop" muted playsinline loop preload="metadata" poster="img/hero-poster.jpg"
              aria-label="A historic black-and-white photo of a corner building sliding across to meet the same corner photographed today.">
         <source src="img/hero-slide.mp4" type="video/mp4">
       </video>
-      <img class="poster-fallback" src="img/hero-still.jpg"
-           alt="A historic black-and-white photo of a corner building beside the same corner photographed today.">
+      <div class="slides" id="slides" aria-hidden="true">
+        <img src="img/slide-split.jpg" alt="" loading="lazy">
+        <img src="img/step-adjust.jpg" alt="" loading="lazy">
+        <img src="img/slide-pip.jpg" alt="" loading="lazy">
+      </div>
     </div>
-    <p class="caption">The same corner, about a hundred years apart. Historic photo from the San Leandro Library.</p>
+    <p class="caption">The same corner, about a hundred years apart. Drag the handle on a phone. Historic photo from the San Leandro Library.</p>
   </div>
 </header>
 
@@ -222,7 +260,7 @@
     <div class="uses-grid">
       <div class="use" style="--c:var(--then)">
         <strong>People</strong>
-        <span>A kid on the same step. A face, year by year. Everyone in one doorway.</span>
+        <span>A kid on the same step. A face, year by year. Everyone in one doorway at Thanksgiving.</span>
       </div>
       <div class="use" style="--c:var(--teal)">
         <strong>Places</strong>
@@ -549,6 +587,55 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  var shot = document.getElementById('hero'), wipe = document.getElementById('wipe');
+  var loop = document.getElementById('loop'), slides = document.getElementById('slides');
+  if (!shot || !wipe) return;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var touch = matchMedia('(hover: none), (max-width: 820px)').matches;
+  var p = 50, manualUntil = 0, dragging = false;
+  function set(v) { p = Math.max(2, Math.min(98, v)); wipe.style.setProperty('--p', p + '%'); }
+  set(50);
+
+  if (touch || reduce) {
+    shot.classList.add('mode-touch');
+    function pos(e) { var r = wipe.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; }
+    wipe.addEventListener('pointerdown', function (e) {
+      dragging = true; wipe.setPointerCapture(e.pointerId); set(pos(e)); manualUntil = Date.now() + 5000; });
+    wipe.addEventListener('pointermove', function (e) { if (dragging) { set(pos(e)); manualUntil = Date.now() + 5000; } });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { wipe.addEventListener(t, function () { dragging = false; }); });
+    if (!reduce) {
+      // scroll drives the seam while the hero is on screen; a drag takes over for a few seconds
+      var onScroll = function () {
+        if (dragging || Date.now() < manualUntil) return;
+        var r = wipe.getBoundingClientRect(), vh = innerHeight || 1;
+        var t = 1 - (r.top + r.height * 0.5) / vh;   // 0 = centre at the bottom edge, 1 = at the top
+        set(18 + 64 * Math.max(0, Math.min(1, t)));
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+      addEventListener('resize', onScroll);
+      onScroll();
+    }
+  } else {
+    shot.classList.remove('mode-touch'); shot.classList.add('mode-show');
+    var imgs = slides ? slides.querySelectorAll('img') : [];
+    var LOOP_MS = 7200, SLIDE_MS = 3500;
+    function showLoop() {
+      imgs.forEach ? imgs.forEach(function (i) { i.classList.remove('on'); }) : null;
+      try { loop.currentTime = 0; } catch (e) {}
+      loop.classList.add('on'); var pl = loop.play(); if (pl && pl.catch) pl.catch(function () {});
+      setTimeout(function () { loop.classList.remove('on'); showSlide(0); }, LOOP_MS);
+    }
+    function showSlide(i) {
+      if (!imgs.length) return showLoop();
+      Array.prototype.forEach.call(imgs, function (im, k) { im.classList.toggle('on', k === i); });
+      setTimeout(function () { if (i + 1 < imgs.length) showSlide(i + 1); else { imgs[i].classList.remove('on'); setTimeout(showLoop, 300); } }, SLIDE_MS);
+    }
+    showLoop();
+  }
+})();
+</script>
 <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
 </body>
 </html>
