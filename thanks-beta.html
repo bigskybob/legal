@@ -35,6 +35,14 @@
   footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
   footer a { color: var(--muted); }
   footer nav { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .shot-fig { margin: 2rem 0 0; }
+  .shot-fig img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
+  .shot-fig figcaption { font-size: .86rem; color: var(--muted); margin-top: .6rem; }
+  .tf { display: flex; align-items: center; gap: .9rem; margin: 1.5rem 0 0;
+        padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .tf svg { width: 48px; height: 48px; flex: none; border-radius: 11px; }
+  .tf p { margin: 0; font-size: .93rem; color: var(--muted); }
+  .tf strong { color: var(--fg); display: block; font-size: 1rem; }
   .colophon {
     display: flex; align-items: center; gap: .9rem;
     margin-top: 1.6rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
@@ -67,6 +75,32 @@
     Then you'll hear from me once more, on the day it lands on the App Store. That's the whole plan.
   </p>
 
+      <div class="tf">
+        <svg viewBox="0 0 64 64" role="img" aria-label="TestFlight">
+          <defs>
+            <linearGradient id="tfg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2fd0f7"/><stop offset="1" stop-color="#0a6fd0"/>
+            </linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="14" fill="url(#tfg)"/>
+          <g fill="#fff">
+            <g>
+              <!-- three swept blades around a hub, angled so the disc reads as turning -->
+              <path d="M32 30 C30 22 30 15 32 11 C34 15 34 22 32 30 Z" opacity=".95"/>
+              <path d="M34 33 C41 30 47 30 51 33 C47 36 41 37 34 35 Z" opacity=".95"/>
+              <path d="M30 35 C25 41 21 46 20 51 C24 49 28 44 31 38 Z" opacity=".95"/>
+            </g>
+            <circle cx="32" cy="32" r="4.4"/>
+          </g>
+          <g fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".5">
+            <path d="M46 18 a20 20 0 0 1 4.5 8"/>
+            <path d="M13.5 38 a20 20 0 0 0 5 8.5"/>
+          </g>
+        </svg>
+        <p><strong>Delivered through TestFlight</strong>
+        Apple's free app for trying things before they ship. Installs beside your normal apps, uninstalls clean.</p>
+      </div>
+
   <h2>How to give it a fair shot</h2>
   <p>
     This part matters more than it sounds, so it's worth reading now rather than when you're standing
@@ -90,6 +124,11 @@
     <li>Where did you first get confused or stuck?</li>
     <li>Would you keep this on your phone? For what photo or place?</li>
   </ul>
+
+  <figure class="shot-fig">
+    <img src="img/lines-street.jpg" alt="A street corner in the app with bright blue guide lines drawn along the building's edges.">
+    <figcaption>Plan the shot: the app pulls out the edges you'll line up against.</figcaption>
+  </figure>
 
   <div class="card">
     <p>

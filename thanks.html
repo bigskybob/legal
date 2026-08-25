@@ -33,6 +33,14 @@
   footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
   footer a { color: var(--muted); }
   footer nav { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .shot-fig { margin: 2rem 0 0; }
+  .shot-fig img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
+  .shot-fig figcaption { font-size: .86rem; color: var(--muted); margin-top: .6rem; }
+  .tf { display: flex; align-items: center; gap: .9rem; margin: 1.5rem 0 0;
+        padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  .tf svg { width: 46px; height: 46px; flex: none; border-radius: 11px; }
+  .tf p { margin: 0; font-size: .93rem; color: var(--muted); }
+  .tf strong { color: var(--fg); display: block; font-size: 1rem; }
   .colophon {
     display: flex; align-items: center; gap: .9rem;
     margin-top: 1.6rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
@@ -48,7 +56,8 @@
   <p class="kicker">You're on the list</p>
   <h1>Thanks. I'll let you know.</h1>
   <p class="lede">
-    Nothing to install and nothing to do. It isn't out yet.
+    It's not out for everyone yet but is coming soon to an App Store near you. Nothing to install,
+    nothing to do.
   </p>
 
   <h2>What happens next</h2>
@@ -63,6 +72,11 @@
     There's a small beta running before launch. If you want to try it on your own photos and tell me
     what breaks, reply to the confirmation email and say so, and I'll move you over to the beta list.
   </p>
+
+  <figure class="shot-fig">
+    <img src="img/lines-historic.jpg" alt="A historic photo of a corner building in the app, with bright blue guide lines drawn along its rooflines and cornices.">
+    <figcaption>Plan the shot: the edges pulled off an old photograph, ready to match on the street.</figcaption>
+  </figure>
 
   <div class="card">
     <p>
