@@ -11,66 +11,36 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#1f2c5f">
+<link rel="stylesheet" href="site.css">
 <style>
-  :root {
-    color-scheme: light dark;
-    --measure: 46rem;
-    --bg: #ffffff; --fg: #1c1c1e; --muted: #6e6e73; --line: #e5e5ea;
-    --link: #0066cc; --card: #f5f5f7; --accent: #0a84ff; --broth: #C08A1E;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#1c1c1e; --fg:#f2f2f7; --muted:#98989d; --line:#38383a; --link:#409cff; --card:#2c2c2e; --broth:#E3B04B; }
-  }
-  * { box-sizing: border-box; }
-  body {
-    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    margin: 0; color: var(--fg); background: var(--bg);
-  }
-  .wrap { max-width: var(--measure); margin: 0 auto; padding: 3rem 1.25rem 4rem; }
-  a { color: var(--link); }
-  .kicker { font-size: .8rem; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0 0 .75rem; }
-  h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.15; letter-spacing: -.02em; margin: 0 0 1rem; }
-  h2 { font-size: 1.2rem; line-height: 1.2; margin: 2.25rem 0 .6rem; }
-  p { margin: 0 0 1rem; }
-  .lede { font-size: 1.15rem; color: var(--muted); }
-  ul { padding-left: 1.2rem; margin: 0 0 1rem; }
-  li { margin: .5rem 0; }
-  .card { border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem; background: var(--card); margin: 2rem 0 0; }
-  .card p:last-child { margin-bottom: 0; }
-  footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
-  footer a { color: var(--muted); }
-  footer nav { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: .9rem; }
-  .shot-fig { margin: 2rem 0 0; }
-  .shot-fig img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
-  .shot-fig figcaption { font-size: .86rem; color: var(--muted); margin-top: .6rem; }
-  .tf { display: flex; align-items: center; gap: .9rem; margin: 1.5rem 0 0;
-        padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
-  .tf svg { width: 48px; height: 48px; flex: none; border-radius: 11px; }
-  .tf p { margin: 0; font-size: .93rem; color: var(--muted); }
-  .tf strong { color: var(--fg); display: block; font-size: 1rem; }
-  .colophon {
-    display: flex; align-items: center; gap: .9rem;
-    margin-top: 1.6rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
-  }
-  .bnf-seal { width: 48px; height: 48px; flex: none; color: var(--muted); --g: var(--broth); opacity: .9; }
-  .colophon p { margin: 0; font-size: .82rem; line-height: 1.45; }
-
-  .brand { display: inline-flex; align-items: center; gap: .6rem; font-weight: 650; color: var(--fg); text-decoration: none; margin: 0 0 1.75rem; }
-  .brand img { width: 40px; height: 40px; display: block; }
+  .band { padding-bottom: 2.2rem; }
+  main { padding-top: 2rem; }
+  ul { padding-left: 1.2rem; }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <a class="brand" href="/"><img src="img/app-icon-256.png" width="40" height="40" alt="">Vantage Point</a>
+<header class="band">
+  <div class="wrap">
+    <nav class="topnav" aria-label="Site">
+      <a class="brand" href="/"><img src="img/app-icon-256.png" width="36" height="36" alt="">Vantage Point</a>
+      <div class="links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="support.html">Support</a>
+      </div>
+    </nav>
+    <p class="kicker">One more step</p>
+    <h1>Thanks. I'll be in touch.</h1>
+    <p class="lede">You're enrolled in the Vantage Point beta. There's nothing to install yet, and one click to do.</p>
+  </div>
+</header>
 
-  <p class="kicker">One more step</p>
-  <h1>Thanks. I'll be in touch.</h1>
-  <p class="lede">
-    You're enrolled in the Vantage Point beta. There's nothing to install yet, and one click to do.
-  </p>
+<main class="wrap">
+  <div class="prose">
 
-  <div class="card" style="border-left:4px solid var(--accent);margin-top:1.4rem">
+
+  <div class="card" style="border-left:4px solid var(--now);margin-top:1.4rem">
     <p>
       <strong>First, confirm your email.</strong> I've just sent you a message from
       rob@getvantagepoint.app with the subject "Important: confirm your subscription - You're on the list for the Vantage Point beta". Open it
@@ -168,10 +138,15 @@
   </p>
   <p>Rob</p>
 
-  <footer>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
     <nav>
       <a href="./">Home</a>
       <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
       <a href="support.html">Support</a>
     </nav>
     <p style="margin:0">Vantage Point: Then &amp; Now. An iPhone app by Rob Killian. Patent pending.</p>
@@ -195,8 +170,8 @@
       </svg>
       <p>a Bob's Noodle Factory production<br>Hand-pulled software since 2026</p>
     </div>
-  </footer>
+  </div>
+</footer>
 
-</div>
 </body>
 </html>
