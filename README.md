@@ -35,7 +35,7 @@ script Kit quarantines every POST). Confirmation emails send from `rob@getvantag
 
 ## The historic photograph
 
-“Masonic Building, ca 1924,” San Leandro Public Library History Collection (Sirsi asset 5385/0),
+“Masonic Building, ca 1924,” San Leandro Historical Photograph and Document Collection (Sirsi asset 5385/0),
 credited in the hero caption, the footers, and `terms.html` §8. Pre-1931 US publication → very
 likely public domain by age; the library's interest is the scan + credit. Courtesy ask to the
 History Room drafted (#327); capture day replaces these placeholders with Rob's own footage.
