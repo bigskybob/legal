@@ -98,6 +98,8 @@
   .app-strip a { margin-left: auto; flex: none; color: #f6f2ec; font-weight: 600; font-size: .95rem; white-space: nowrap;
     padding: .5rem .85rem; border-radius: 999px; border: 1px solid rgba(246,242,236,.35); text-decoration: none; }
   .app-strip a:hover { background: rgba(246,242,236,.12); }
+  .app-strip a.tf { background: #f6f2ec; color: #1f2c5f; border-color: #f6f2ec; }
+  .app-strip a.tf:hover { background: #fff; }
   @media (max-width: 540px) { .app-strip { flex-wrap: wrap; } .app-strip a { margin-left: 0; } }
   .eyebrow {
     display: inline-block; font-size: .78rem; letter-spacing: .1em;
@@ -166,6 +168,17 @@
   .dots button:hover, .dots button:focus-visible { background: #fff; outline: none; }
   .caption { font-size: .9rem; color: rgba(248,240,230,.82); margin: .85rem 0 0; }
   .hero .caption a { color: var(--cream); }
+
+  /* ---------- the pairs strip ---------- */
+  .pairs { background: var(--bg); border-bottom: 1px solid var(--line); padding: 2.25rem 0 2rem; }
+  .pairs .pairs-lead { margin: 0 0 1.1rem; color: var(--muted); font-size: 1.02rem; }
+  .pairs .pairs-lead em { font-style: normal; font-weight: 650; color: var(--fg); }
+  .pairs-row { display: flex; gap: .9rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 0 .75rem; margin: 0 -1.25rem; padding-inline: 1.25rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .pairs-row figure { flex: 0 0 auto; scroll-snap-align: start; margin: 0; width: min(78vw, 22rem); }
+  .pairs-row figure.tall { width: min(60vw, 14rem); }
+  .pairs-row img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--card); }
+  .pairs-row figcaption { font-size: .85rem; color: var(--muted); margin-top: .5rem; }
+  @media (min-width: 52rem) { .pairs-row { margin: 0; padding-inline: 0; } }
 
   /* ---------- use cases ---------- */
   .uses { background: var(--card-2); border-bottom: 1px solid var(--line); padding: 2.25rem 0; }
@@ -273,13 +286,13 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow">iPhone · Free · Coming soon</span>
+    <span class="eyebrow">iPhone · Free · Public beta open</span>
     <h1>Retake photos in&nbsp;the same spot.</h1>
     <p class="byline">See change through time from the same perspective.</p>
     <div class="app-strip">
       <img class="app-icon" src="img/app-icon-256.png" width="56" height="56" alt="The Vantage Point app icon: a cream V over a mauve ghost V on a twilight gradient.">
-      <p><strong>An iPhone app. Coming soon to the App Store.</strong><span>Free at launch. Sign up to hear the day it lands.</span></p>
-      <a href="#signup">Get on the list</a>
+      <p><strong>An iPhone app. The public beta is open.</strong><span>Free on TestFlight today. App Store in October.</span></p>
+      <a class="tf" href="https://testflight.apple.com/join/Cv6UWqcD" rel="noopener">Join the beta</a>
     </div>
     <p class="lede prose">
       It takes you back to where a photo was taken, so you can take it again.
@@ -309,6 +322,19 @@
   </div>
 </header>
 
+<div class="pairs">
+  <div class="wrap">
+    <p class="pairs-lead"><em>The pair is the product.</em> Every shot comes out as the two photos together: split, stacked, one wiping into the other, a blend, or one tucked inside the other. Swipe through a few.</p>
+    <div class="pairs-row" aria-label="Example pairs made in the app">
+      <figure><img src="img/slide-split.jpg" alt="A then-and-now pair exported side by side: the 1924 corner building on the left, the same corner today on the right." loading="lazy"><figcaption>Side by side, straight out of the app.</figcaption></figure>
+      <figure><img src="img/slide-pip.jpg" alt="A then-and-now pair exported with the old photo tucked into a corner of the new one." loading="lazy"><figcaption>Picture in picture.</figcaption></figure>
+      <figure class="tall"><img src="img/ui-output.jpg" alt="The output screen: the pair in a wipe layout with the crop and layout options underneath." loading="lazy"><figcaption>The output room, where you pick the layout.</figcaption></figure>
+      <figure><img src="img/step-adjust.jpg" alt="The historic photo blended over today's view of the same building." loading="lazy"><figcaption>The blend, mid-alignment.</figcaption></figure>
+      <figure class="tall"><img src="img/ui-adjust.jpg" alt="The adjust screen: nudge, rotate and scale controls under the pair." loading="lazy"><figcaption>Adjust, before it goes out.</figcaption></figure>
+    </div>
+  </div>
+</div>
+
 <div class="uses">
   <div class="wrap">
     <p class="uses-lead"><em>Transformations take many forms.</em> Somewhere to start:</p>
@@ -334,7 +360,7 @@
   <div class="wrap">
     <h2>Want in?</h2>
     <p class="prose" style="color:var(--muted);margin-bottom:0">
-      It's not out for everyone yet but is coming soon to an App Store near you. Pick which one of these makes sense for you.
+      The public beta is open to anyone with an iPhone. The App Store release is planned for October. Pick which one of these makes sense for you.
     </p>
     <p class="prose" style="color:var(--muted);margin:.7rem 0 0">
       An Android version and a companion iPad app are both on the way. Sit tight.
@@ -344,14 +370,19 @@
 
       <div class="choice" id="beta" style="--c:var(--now)">
         <span class="tag">Hands on</span>
-        <h3>Try the beta</h3>
+        <h3>Try the beta, today</h3>
         <p>
-          The beta runs through TestFlight, Apple's free app for trying things before they ship. You'd
-          point Vantage Point at your own old photos and tell me what broke. Full instructions come with
-          the signup.
+          The beta runs through TestFlight, Apple's free app for trying things before they ship. Tap the
+          button, let it install TestFlight if you don't have it, and Vantage Point lands beside your
+          normal apps. It uninstalls clean.
+        </p>
+        <p style="margin:0 0 1rem"><a class="btn" style="--c:var(--now)" href="https://testflight.apple.com/join/Cv6UWqcD" rel="noopener">Join the beta on TestFlight</a></p>
+        <p>
+          Leave your email too and you'll get the notes when a new build goes out, and the launch-day
+          mail. That part is optional.
         </p>
         <div class="form-slot">
-          <!-- Kit form: Beta waitlist (id 9840102). Our own markup posting to Kit's endpoint;
+          <!-- Kit form: Beta list (id 9840102). Our own markup posting to Kit's endpoint;
                ck.5.js (loaded at the foot of the page) attaches via data-sv-form/data-uid so the
                submit carries Kit's anti-bot token. Kit holds the redirect to /thanks-beta.html
                in the form settings. -->
@@ -364,7 +395,7 @@
               <input class="formkit-input" type="email" name="email_address" placeholder="you@example.com"
                      aria-label="Your email address, to join the beta" required>
               <button class="btn formkit-submit" data-element="submit" type="submit" style="--c:var(--now)">
-                <span>Join the beta</span>
+                <span>Send me the build notes</span>
               </button>
             </div>
           </form>
@@ -398,6 +429,10 @@
 
     </div>
 
+    <p class="fineprint" style="margin-top:1.25rem">
+      Already testing? Bugs and ideas go to the <a href="/feedback">feedback form</a>, and testers
+      compare pairs in <a href="/community">r/VantagePointApp</a>.
+    </p>
     <p class="fineprint">
       The signup form is run by Kit, so that part talks to them. Kit also tells me whether an email
       got opened. That's all I see. I'm not going to sell your address
@@ -555,7 +590,7 @@
   <div class="wrap">
     <h2>Pick whichever one fits</h2>
     <p class="prose" style="color:var(--muted);margin-bottom:0">
-      Test the app with me, or just hear from me on launch day. Both are useful, and neither one
+      Test the app with me now, or just hear from me on launch day. Both are useful, and neither one
       signs you up for anything else.
     </p>
 
@@ -563,10 +598,12 @@
 
       <div class="choice" style="--c:var(--now)">
         <span class="tag">Hands on</span>
-        <h3>Try the beta</h3>
-        <p>Try it on your own old photos and tell me what broke. Details come with the signup.</p>
+        <h3>Try the beta, today</h3>
+        <p>Try it on your own old photos and tell me what broke.</p>
+        <p style="margin:0 0 1rem"><a class="btn" style="--c:var(--now)" href="https://testflight.apple.com/join/Cv6UWqcD" rel="noopener">Join the beta on TestFlight</a></p>
+        <p>Email is optional: build notes while the beta runs, and the launch-day mail.</p>
         <div class="form-slot">
-          <!-- Kit form: Beta waitlist (id 9840102), second placement. -->
+          <!-- Kit form: Beta list (id 9840102), second placement. -->
           <form class="signup-form seva-form formkit-form"
                 action="https://app.kit.com/forms/9840102/subscriptions" method="post"
                 data-sv-form="9840102" data-uid="c36081a78c" data-format="inline" data-version="5"
@@ -576,7 +613,7 @@
               <input class="formkit-input" type="email" name="email_address" placeholder="you@example.com"
                      aria-label="Your email address, to join the beta" required>
               <button class="btn formkit-submit" data-element="submit" type="submit" style="--c:var(--now)">
-                <span>Join the beta</span>
+                <span>Send me the build notes</span>
               </button>
             </div>
           </form>
