@@ -174,10 +174,9 @@
   .pairs .pairs-lead { margin: 0 0 1.1rem; color: var(--muted); font-size: 1.02rem; }
   .pairs .pairs-lead em { font-style: normal; font-weight: 650; color: var(--fg); }
   .pairs-row { display: flex; gap: .9rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 0 .75rem; margin: 0 -1.25rem; padding-inline: 1.25rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
-  .pairs-row figure { flex: 0 0 auto; scroll-snap-align: start; margin: 0; width: min(78vw, 22rem); }
-  .pairs-row figure.tall { width: min(60vw, 14rem); }
-  .pairs-row img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--card); }
-  .pairs-row figcaption { font-size: .85rem; color: var(--muted); margin-top: .5rem; }
+  .pairs-row figure { flex: 0 0 auto; scroll-snap-align: start; margin: 0; max-width: 84vw; }
+  .pairs-row img { display: block; height: clamp(11rem, 42vw, 16rem); width: auto; max-width: 84vw; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); background: var(--card); }
+  .pairs-row figcaption { font-size: .85rem; color: var(--muted); margin-top: .5rem; max-width: 22rem; }
   @media (min-width: 52rem) { .pairs-row { margin: 0; padding-inline: 0; } }
 
   /* ---------- use cases ---------- */
@@ -328,9 +327,9 @@
     <div class="pairs-row" aria-label="Example pairs made in the app">
       <figure><img src="img/slide-split.jpg" alt="A then-and-now pair exported side by side: the 1924 corner building on the left, the same corner today on the right." loading="lazy"><figcaption>Side by side, straight out of the app.</figcaption></figure>
       <figure><img src="img/slide-pip.jpg" alt="A then-and-now pair exported with the old photo tucked into a corner of the new one." loading="lazy"><figcaption>Picture in picture.</figcaption></figure>
-      <figure class="tall"><img src="img/ui-output.jpg" alt="The output screen: the pair in a wipe layout with the crop and layout options underneath." loading="lazy"><figcaption>The output room, where you pick the layout.</figcaption></figure>
+      <figure><img src="img/ui-output.jpg" alt="The output screen: the pair in a wipe layout with the crop and layout options underneath." loading="lazy"><figcaption>The output room, where you pick the layout.</figcaption></figure>
       <figure><img src="img/step-adjust.jpg" alt="The historic photo blended over today's view of the same building." loading="lazy"><figcaption>The blend, mid-alignment.</figcaption></figure>
-      <figure class="tall"><img src="img/ui-adjust.jpg" alt="The adjust screen: nudge, rotate and scale controls under the pair." loading="lazy"><figcaption>Adjust, before it goes out.</figcaption></figure>
+      <figure><img src="img/ui-adjust.jpg" alt="The adjust screen: nudge, rotate and scale controls under the pair." loading="lazy"><figcaption>Adjust, before it goes out.</figcaption></figure>
     </div>
   </div>
 </div>
